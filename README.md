@@ -1,6 +1,14 @@
 # rusty-orderbook
 An attempt to build an orderbook exchange in Rust
 
+# Usage
+1. Make sure you have installed the rust environment. (Further instructions at [rustup.rs](https://rustup.rs/))
+2. To build the release / optimized binary: `cargo build --release`
+3. Execute the binary: `./target/release/rusty-orderbook --input <INPUT_LOGS>` (You can try some sample logs in `sample_logs` folder
+
+## Testing
+Run the `cargo test` command to run the unit tests.
+
 # Theoretical Analysis
 The orderbook is implemented with the help of maps for mapping the order ids and map order lists to the tick they are part of and heaps for determining the best bid and best ask at any point of time in O(1).
 
@@ -27,5 +35,5 @@ We benefit from faster integer comparisons by using `u64` to denote the prices /
 
 # Future Optimizations
 
-# Parallel Request Handling
+## Parallel Request Handling
 Since we're using DashMap for hashmaps, we can parallelize order updates / deletions from their actual execution.

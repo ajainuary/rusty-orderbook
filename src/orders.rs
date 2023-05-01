@@ -1,20 +1,15 @@
 use lazy_regex::regex_captures;
 
-#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum OrderContent {
     LimitOrderBuy {
-        price: u32,
-        quantity: u32
+        price: u64,
+        quantity: u64
     },
     LimitOrderSell {
-        price: u32,
-        quantity: u32
+        price: u64,
+        quantity: u64
     }
-}
-
-pub  struct Order {
-    order_id: u64,
-    content: OrderContent
 }
 
 impl TryFrom<&str> for OrderContent {
@@ -44,6 +39,7 @@ impl TryFrom<&str> for OrderContent {
         }
     }
 }
+
 #[cfg(test)]
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.

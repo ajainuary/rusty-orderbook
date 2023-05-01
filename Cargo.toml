@@ -7,4 +7,6 @@ edition = "2021"
 
 [dependencies]
 chrono = "0.4.24"
+clap = { version = "4.2.5", features = ["derive"] }
+dashmap = "5.4.0"
 lazy-regex = "2.5.0"

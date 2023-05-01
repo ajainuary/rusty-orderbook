@@ -3,7 +3,7 @@ use lazy_regex::regex_captures;
 use crate::orders::*;
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
-enum RequestType {
+pub enum RequestType {
     Create,
     Replace,
     Cancel
@@ -12,9 +12,9 @@ enum RequestType {
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Request {
     timestamp: DateTime<FixedOffset>,
-    order_id: u64,
-    request_type: RequestType,
-    content: OrderContent
+    pub order_id: u64,
+    pub request_type: RequestType,
+    pub content: OrderContent
 }
 
 impl PartialOrd for Request {
@@ -62,6 +62,23 @@ mod tests {
             order_id: 7,
             request_type: RequestType::Create,
             content: OrderContent::LimitOrderBuy { price: 200, quantity: 100 }
+            };
+
+        let result: Result<Request, _> = log_line.try_into();
+
+        assert_eq!(result.unwrap(), expected);
+    }
+
+    #[test]
+    fn should_parse_valid_string_again() {
+        let log_line =
+            "[Sun, 23 Jan 2000 01:23:45 GMT] 1 CREATE \"LIMIT_ORDER_SELL 100 200\"";
+
+        let expected = Request {
+            timestamp: DateTime::parse_from_rfc2822("Sun, 23 Jan 2000 01:23:45 GMT").unwrap(),
+            order_id: 1,
+            request_type: RequestType::Create,
+            content: OrderContent::LimitOrderSell { price: 100, quantity: 200 }
             };
 
         let result: Result<Request, _> = log_line.try_into();

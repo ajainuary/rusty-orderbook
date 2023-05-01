@@ -22,7 +22,7 @@ To be implemented, but can be done in O(1) by updating the order in the order ma
 
 # Optimizations
 
-# Use `u64` vs `float` for prices
+## Use `u64` vs `float` for prices
 We benefit from faster integer comparisons by using `u64` to denote the prices / ticks. We can use an additional precision field to convert decimal numbers to integers.
 
 # Future Optimizations

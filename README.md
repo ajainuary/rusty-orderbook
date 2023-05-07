@@ -20,13 +20,13 @@ O(log(P)) where P is the number of distinct prices at which we have bids for a n
 O(1) if there already exists an order at that limit price. (Insertion in a linked list)
 
 ## Deletion
-To be implemented, but can be done in O(1) by lazily deleting the order from the order map.
+Done in O(1) by lazily deleting the order from the order map.
 
 ## Execution
 O(N) where N is the number of orders that are matched with the given order. Alternatively it can also be treated as O(Q) where Q is the quantity/size of the order since an order of size Q can be matched with at most Q orders.
 
 ## Modification
-To be implemented, but can be done in O(1) by updating the order in the order map.
+Done in O(1) by updating the order in the order map.
 
 # Optimizations
 

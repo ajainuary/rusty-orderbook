@@ -17,3 +17,9 @@ Cargo.lock
 # Added by cargo
 
 /target
+
+# Mac OS
+*.DS_Store
+
+# VS Code
+.vscode

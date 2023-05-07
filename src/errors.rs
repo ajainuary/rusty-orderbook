@@ -11,7 +11,7 @@ impl fmt::Display for OrderbookProcessingError{
         write!(f, "There was an error processing the orderbook.")
     }
 }
-
+#[derive(Debug, Clone)]
 pub struct OrderError;
 
 impl fmt::Display for OrderError{

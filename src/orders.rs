@@ -9,33 +9,41 @@ pub enum OrderContent {
     LimitOrderSell {
         price: u64,
         quantity: u64
-    }
+    },
+    Empty
 }
 
 impl TryFrom<&str> for OrderContent {
     type Error = String;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
-        let (order_type, rest) = value
-            .split_once(" ")
-            .ok_or(format!("Unable to parse order contents: {}", value)).unwrap();
-        match order_type {
-            "LIMIT_ORDER_BUY" => {
-                let (_, price, quantity) = regex_captures!(r#"([0-9]+) ([0-9]+)"#, rest).unwrap();
-                println!("Price: {}, Quantity: {}", price, quantity);
-                Ok(OrderContent::LimitOrderBuy {
-                    price: price.parse().unwrap(),
-                    quantity: quantity.parse().unwrap()
-                })
-            },
-            "LIMIT_ORDER_SELL" => {
-                let (_, price, quantity) = regex_captures!(r#"([0-9]+) ([0-9]+)"#, rest).unwrap();
-                Ok(OrderContent::LimitOrderSell {
-                    price: price.parse().unwrap(),
-                    quantity: quantity.parse().unwrap()
-                })
-            },
-            _ => Err(format!("Unkown order type")),
+        match value.split_once(" ") {
+            Some((order_type, rest)) => {
+                match order_type {
+                    "LIMIT_ORDER_BUY" => {
+                        let (_, price, quantity) = regex_captures!(r#"([0-9]+) ([0-9]+)"#, rest).unwrap();
+                        println!("Price: {}, Quantity: {}", price, quantity);
+                        Ok(OrderContent::LimitOrderBuy {
+                            price: price.parse().unwrap(),
+                            quantity: quantity.parse().unwrap()
+                        })
+                    },
+                    "LIMIT_ORDER_SELL" => {
+                        let (_, price, quantity) = regex_captures!(r#"([0-9]+) ([0-9]+)"#, rest).unwrap();
+                        Ok(OrderContent::LimitOrderSell {
+                            price: price.parse().unwrap(),
+                            quantity: quantity.parse().unwrap()
+                        })
+                    },
+                    _ => Err(format!("Unkown order type")),
+                }
+            }
+            None => {
+                match value {
+                    "EMPTY" => Ok(OrderContent::Empty),
+                    _ => Err(format!("Unkown order type"))
+                }
+            }
         }
     }
 }

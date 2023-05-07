@@ -84,33 +84,37 @@ fn new_order(
     println!("Executing request {:?}", request.content);
     match execute_order(&mut request.content, orders, tick_map, limits_bid, limits_ask) {
         Some(OrderContent::LimitOrderBuy { price, quantity }) => {
-            if tick_map.contains_key(&price) {
-                // Limit already exists, append order
-                tick_map.get_mut(&price).unwrap().orders.push_back(request.order_id);
-            } else {
-                tick_map.insert(*price, Limit {
-                    price: *price,
-                    limit_type: LimitType::Bid,
-                    orders: LinkedList::from([request.order_id]),
-                });
-                limits_bid.push(*price);
+            if *quantity > 0 {
+                if tick_map.contains_key(&price) {
+                    // Limit already exists, append order
+                    tick_map.get_mut(&price).unwrap().orders.push_back(request.order_id);
+                } else {
+                    tick_map.insert(*price, Limit {
+                        price: *price,
+                        limit_type: LimitType::Bid,
+                        orders: LinkedList::from([request.order_id]),
+                    });
+                    limits_bid.push(*price);
+                }
+                orders.insert(request.order_id, request.content);
             }
-            orders.insert(request.order_id, request.content);
             Ok(())
         }
         Some(OrderContent::LimitOrderSell { price, quantity }) => {
-            if tick_map.contains_key(&price) {
-                // Limit already exists, append order
-                tick_map.get_mut(&price).unwrap().orders.push_back(request.order_id);
-            } else {
-                tick_map.insert(*price, Limit {
-                    price: *price,
-                    limit_type: LimitType::Ask,
-                    orders: LinkedList::from([request.order_id]),
-                });
-                limits_ask.push(Reverse(*price));
+            if *quantity > 0 {
+                if tick_map.contains_key(&price) {
+                    // Limit already exists, append order
+                    tick_map.get_mut(&price).unwrap().orders.push_back(request.order_id);
+                } else {
+                    tick_map.insert(*price, Limit {
+                        price: *price,
+                        limit_type: LimitType::Ask,
+                        orders: LinkedList::from([request.order_id]),
+                    });
+                    limits_ask.push(Reverse(*price));
+                }
+                orders.insert(request.order_id, request.content);
             }
-            orders.insert(request.order_id, request.content);
             Ok(())
         }
         Some(_) => Err(OrderError),

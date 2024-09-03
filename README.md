@@ -24,6 +24,9 @@ An attempt to build an orderbook exchange in Rust.
 ## 🧪 Testing
 Run the `cargo test` command to run the unit tests.
 
+## System Design
+![Orderbook Order Flow](https://github.com/user-attachments/assets/268835be-8d2d-4bd2-b588-1c1f5417701c)
+
 ## 📊 Theoretical Analysis
 The orderbook is implemented with the help of maps for mapping the order IDs, mapping order lists to the tick they are part of, and heaps for determining the best bid and best ask at any point in time in O(1).
 
